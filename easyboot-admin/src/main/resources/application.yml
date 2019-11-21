@@ -93,5 +93,6 @@ zfcustom:
         - "/auth/authCode"
         - "/druid/**"
         - "/hello/**"
+        - "/test/**"
 
 
