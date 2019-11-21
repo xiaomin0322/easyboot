@@ -1,4 +1,4 @@
-package com.zf.easyboot.modules.work;
+package com.zf.easyboot.modules.work.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
