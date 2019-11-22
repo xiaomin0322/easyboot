@@ -1,18 +1,19 @@
 package com.zf.easyboot.common.base;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zf.easyboot.common.utils.ApiMessage;
 
 /**
  * @author Cenyol mail: mr.cenyol@gmail.com
@@ -21,7 +22,7 @@ import java.util.Map;
  * provide the basic curd method
  * include list/insert/view/update/delete
  */
-@Slf4j
+@SuppressWarnings("rawtypes")
 public class CurdController<T> {
 
     @Autowired
@@ -43,15 +44,16 @@ public class CurdController<T> {
      * @param map
      * @return
      */
-    @PostMapping( value = {"/listByPage", "/index", "/list"})
-    @ResponseBody
-    public String listByPage(@RequestBody Map<String, Object> map) {
-        return JSON.toJSONString(
+  
+	@PostMapping( value = {"/listByPage", "/index", "/list"})
+    public ApiMessage listByPage(@RequestBody Map<String, Object> map) {
+        return 
+        		ApiMessage.ofSuccess(
                 mapper.selectPage(
                         extractPageFromRequestMap(map),
                         extractWrapperFromRequestMap(map)
-                )
-        );
+                        )
+                );
     }
     
     
@@ -67,38 +69,32 @@ public class CurdController<T> {
      * @return
      */
     @RequestMapping( value = {"/listByPage", "/index", "/list"})
-    @ResponseBody
-    public String list( Map<String, Object> map) {
-        return JSON.toJSONString(
+    public ApiMessage list( Map<String, Object> map) {
+        		return ApiMessage.ofSuccess(
                 mapper.selectPage(
                         extractPageFromRequestMap(map),
-                        extractWrapperFromRequestMap(map)
-                )
-        );
+                        extractWrapperFromRequestMap(map))
+                );
     }
 
     @PostMapping( value = {"/save", "/insert"} )
-    @ResponseBody
-    public int save(@RequestBody T map) {
-        return mapper.insert(map);
+    public ApiMessage save(@RequestBody T map) {
+        return ApiMessage.ofSuccess(mapper.insert(map));
     }
 
     @GetMapping( value = {"/getById", "/get"} )
-    @ResponseBody
-    public String getById(@RequestBody Long id) {
-        return JSON.toJSONString(mapper.selectById(id));
+    public ApiMessage getById(@RequestBody Long id) {
+        return  ApiMessage.ofSuccess(mapper.selectById(id));
     }
 
     @PostMapping( value = {"/updateById", "/update"} )
-    @ResponseBody
-    public int updateById(@RequestBody T map) {
-        return mapper.updateById(map);
+    public ApiMessage updateById(@RequestBody T map) {
+        return ApiMessage.ofSuccess(mapper.updateById(map));
     }
 
     @PostMapping( value = {"/deleteById", "/delete"} )
-    @ResponseBody
-    public int deleteById(@RequestBody Long id) {
-        return mapper.deleteById(id);
+    public ApiMessage deleteById(@RequestBody Long id) {
+        return ApiMessage.ofSuccess(mapper.deleteById(id));
     }
 
 
